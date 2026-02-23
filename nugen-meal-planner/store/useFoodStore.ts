@@ -1,10 +1,11 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Ingredient, Recipe, UserPreferences, WeeklyPlan } from './types';
+import { Ingredient, Recipe, UserPreferences, WeeklyPlan, UserProfile } from './types';
 
 interface FoodState {
     hasCompletedSetup: boolean;
+    userProfile: UserProfile | null;
     userIngredients: Ingredient[];
     userPreferences: UserPreferences;
     generatedRecipes: Recipe[];
@@ -13,6 +14,7 @@ interface FoodState {
 
     // Actions
     completeSetup: () => void;
+    setUserProfile: (profile: UserProfile | null) => void;
     setUserIngredients: (ingredients: Ingredient[]) => void;
     setUserPreferences: (preferences: UserPreferences) => void;
     setGeneratedRecipes: (recipes: Recipe[]) => void;
@@ -26,6 +28,7 @@ export const useFoodStore = create<FoodState>()(
     persist(
         (set) => ({
             hasCompletedSetup: false,
+            userProfile: null,
             userIngredients: [],
             userPreferences: {
                 cookTimeMinutes: 30,
@@ -44,6 +47,7 @@ export const useFoodStore = create<FoodState>()(
             isAiOptimizationMode: false,
 
             completeSetup: () => set({ hasCompletedSetup: true }),
+            setUserProfile: (profile) => set({ userProfile: profile }),
             setUserIngredients: (ingredients) => set({ userIngredients: ingredients }),
             setUserPreferences: (preferences) => set({ userPreferences: preferences }),
             setGeneratedRecipes: (recipes) => set({ generatedRecipes: recipes }),
@@ -65,6 +69,7 @@ export const useFoodStore = create<FoodState>()(
                 set((state) => ({ isAiOptimizationMode: !state.isAiOptimizationMode })),
             clearPlan: () =>
                 set({
+                    userProfile: null,
                     weeklyPlan: {
                         Monday: [],
                         Tuesday: [],

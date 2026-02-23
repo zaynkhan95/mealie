@@ -18,6 +18,12 @@ export interface UserPreferences {
     batchCookMode: boolean;
 }
 
+export interface UserProfile {
+    name: string;
+    email: string;
+    phone: string;
+}
+
 export interface RecipeIngredient {
     ingredientId: string;
     name: string;

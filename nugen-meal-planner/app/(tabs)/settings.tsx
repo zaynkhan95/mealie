@@ -10,11 +10,12 @@ export default function SettingsScreen() {
     const colors = Colors[colorScheme ?? 'light'];
     const router = useRouter();
 
-    const { isAiOptimizationMode, toggleAiOptimizationMode, clearPlan } = useFoodStore();
+    const { isAiOptimizationMode, toggleAiOptimizationMode, clearPlan, userProfile } = useFoodStore();
 
     const handleResetApp = () => {
         useFoodStore.setState({
             hasCompletedSetup: false,
+            userProfile: null,
             userIngredients: [],
             generatedRecipes: [],
         });
@@ -29,9 +30,27 @@ export default function SettingsScreen() {
             </View>
 
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                {/* Account Section */}
+                {userProfile && (
+                    <View style={styles.section}>
+                        <Text style={[styles.sectionTitle, { color: colors.icon }]}>PROFILE</Text>
+                        <View style={[styles.card, { backgroundColor: colors.surface, padding: 16 }]}>
+                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: colors.text, marginBottom: 4 }}>
+                                {userProfile.name}
+                            </Text>
+                            <Text style={{ fontSize: 14, color: colors.icon }}>
+                                {userProfile.email}
+                            </Text>
+                            <Text style={{ fontSize: 14, color: colors.icon, marginTop: 2 }}>
+                                {userProfile.phone}
+                            </Text>
+                        </View>
+                    </View>
+                )}
+
                 {/* Profile Section */}
                 <View style={styles.section}>
-                    <Text style={[styles.sectionTitle, { color: colors.icon }]}>PROFILE & PREFERENCES</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.icon }]}>PREFERENCES</Text>
                     <View style={[styles.card, { backgroundColor: colors.surface }]}>
                         <TouchableOpacity style={styles.row} onPress={() => router.replace('/onboarding')}>
                             <View style={styles.rowContent}>
